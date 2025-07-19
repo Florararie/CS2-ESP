@@ -35,8 +35,8 @@ Initial Commit
 - - Shows location, time left until explosion, defusal status / how much time left until defusal. Makes sure to keep track of explosion and defusal success to avoid any persistence on screen
 
 <div style="display: flex; justify-content: space-between;">
-    <img src="/Images/config.png" alt="Configuration Menu" style="width: 48%;"/>
-    <img src="/Images/ingame.png" alt="In-Game Demonstration" style="width: 48%;"/>
+    <img src="/Images/config.png" alt="Configuration Menu" style="height: 800px; width: auto;"/>
+    <img src="/Images/ingame.png" alt="In-Game Demonstration" style="height: 800px; width: auto;"/>
 </div>
 
 ## Usage
