@@ -10,4 +10,5 @@ class Entity:
     health: int = 0
     armor: int = 0
     team: int = 0
+    lifestate: int = 0
     pos: tuple = None
