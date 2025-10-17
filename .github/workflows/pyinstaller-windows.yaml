@@ -1,0 +1,41 @@
+name: PyInstaller Windows Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r src/requirements.txt
+          pip install pyinstaller
+
+      - name: Generate Tag and Name
+        id: meta
+        run: |
+          $date = Get-Date -Format "yyyy.MM.dd-HHmm"
+          echo "tag=v$date" >> $env:GITHUB_OUTPUT
+
+      - name: Build Executable
+        run: pyinstaller --onefile src/run.py --distpath dist --name injector-${{ steps.meta.outputs.tag }}
+
+      - name: Create Draft Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          name: ${{ steps.meta.outputs.tag }}
+          draft: true
+          files: ./dist/run-${{ steps.meta.outputs.tag }}.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
