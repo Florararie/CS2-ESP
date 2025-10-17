@@ -28,7 +28,7 @@ jobs:
           echo "tag=v$date" >> $env:GITHUB_OUTPUT
 
       - name: Build Executable
-        run: pyinstaller --onefile src/run.py --distpath dist --name injector-${{ steps.meta.outputs.tag }}
+        run: pyinstaller --onefile src/run.py --distpath dist --name run-${{ steps.meta.outputs.tag }}
 
       - name: Create Draft Release
         uses: softprops/action-gh-release@v2
