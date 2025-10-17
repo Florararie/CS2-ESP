@@ -62,7 +62,6 @@ class Config:
         except Exception as e:
             print(f"[Config] Error loading config: {e}")
         
-        # Return default config if loading failed
         return self.default_config.copy()
 
 

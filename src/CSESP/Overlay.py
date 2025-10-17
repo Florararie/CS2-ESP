@@ -27,6 +27,12 @@ class OverlayMenu(QDialog):
     def _setup_ui(self):
         layout = QVBoxLayout()
 
+        self.state_label = QtWidgets.QLabel("ESP: ON")
+        self.state_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.state_label.setFont(QtGui.QFont("Segoe UI", 12, QtGui.QFont.Bold))
+        self.state_label.setStyleSheet("color: lime;")
+        layout.addWidget(self.state_label)
+
         for label in ["draw_box", "draw_names", "draw_health", "draw_distance", "draw_skeleton", "draw_head", "draw_lines", "draw_teammates", "draw_bomb"]:
             cb = QCheckBox(label.replace('_', ' ').title())
             cb.setChecked(self.config[label])
@@ -53,6 +59,15 @@ class OverlayMenu(QDialog):
         layout.addWidget(reset_button)
 
         self.setLayout(layout)
+
+
+    def set_esp_state(self, enabled: bool):
+        if enabled:
+            self.state_label.setText("ESP: ON")
+            self.state_label.setStyleSheet("color: lime;")
+        else:
+            self.state_label.setText("ESP: OFF")
+            self.state_label.setStyleSheet("color: red;")
 
 
     def _on_feature_toggle(self, key, state):
@@ -111,6 +126,15 @@ class OverlayMenu(QDialog):
             button.setStyleSheet(f"background-color: {default_color.name()}; color: black;")
 
         self.config.save()
+
+
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Escape:
+            if hasattr(self.parent(), "_toggle_menu"):
+                self.parent()._toggle_menu()
+            event.accept()
+        else:
+            super().keyPressEvent(event)
 
 
 
@@ -270,7 +294,6 @@ class OverlayRenderer:
                 self.scene.addItem(line)
 
         if self.config["draw_skeleton"]:
-            # Draw skeleton connections
             connections = [
                 ("head", "neck"), ("neck", "waist"),
                 ("neck", "left_shoulder"), ("left_shoulder", "left_arm"), ("left_arm", "left_hand"),
@@ -448,6 +471,7 @@ class ESPOverlay(QtWidgets.QWidget):
             if not hasattr(self, "_toggle_key_pressed") or not self._toggle_key_pressed:
                 self._toggle_key_pressed = True
                 self.esp_enabled = not self.esp_enabled
+                self.menu.set_esp_state(self.esp_enabled)
         else:
             self._toggle_key_pressed = False
 

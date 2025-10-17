@@ -123,13 +123,13 @@ class ESP:
             if not list_entry:
                 return
                 
-            controller = self.pm.read_ulonglong(list_entry + 120 * (index & 0x1FF))
+            controller = self.pm.read_ulonglong(list_entry + 112 * (index & 0x1FF))
             if controller == local_controller:
                 return
                 
             pawn_handle = self.pm.read_ulonglong(controller + Offsets.m_hPlayerPawn)
             pawn_entry = self.pm.read_ulonglong(entity_list + (8 * ((pawn_handle & 0x7FFF) >> 9)) + 16)
-            pawn = self.pm.read_ulonglong(pawn_entry + 120 * (pawn_handle & 0x1FF))
+            pawn = self.pm.read_ulonglong(pawn_entry + 112 * (pawn_handle & 0x1FF))
             
             if not pawn:
                 return
