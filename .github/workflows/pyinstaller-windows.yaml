@@ -28,7 +28,19 @@ jobs:
           echo "tag=v$date" >> $env:GITHUB_OUTPUT
 
       - name: Build Executable
-        run: pyinstaller --onefile src/run.py --distpath dist --name run-${{ steps.meta.outputs.tag }}
+        run: |
+          pyinstaller --onefile `
+            --name run-${{ steps.meta.outputs.tag }} `
+            --distpath dist `
+            --hidden-import=PySide6 `
+            --hidden-import=PySide6.QtCore `
+            --hidden-import=PySide6.QtWidgets `
+            --hidden-import=PySide6.QtGui `
+            --hidden-import=PySide6.QtNetwork `
+            --collect-all PySide6 `
+            --collect-all shiboken6 `
+            --copy-metadata PySide6 `
+            src/run.py
 
       - name: Create Draft Release
         uses: softprops/action-gh-release@v2
